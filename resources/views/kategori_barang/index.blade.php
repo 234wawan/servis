@@ -106,7 +106,7 @@ $(function() {
             document.getElementById('kategoriId').value = id;
             document.getElementById('inputNamaKategori').value = this.dataset.nama;
             document.getElementById('inputDeskripsiKategori').value = this.dataset.deskripsi || '';
-            document.getElementById('formKategori').action = '{{ url("kategori-barang") }}/' + id;
+            document.getElementById('formKategori').action = '{{ url("admin/kategori-barang") }}/' + id;
             document.getElementById('methodKategori').value = 'PUT';
             bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKategori')).show();
         });
@@ -117,7 +117,7 @@ $(function() {
         document.getElementById('kategoriId').value = '';
         document.getElementById('inputNamaKategori').value = '';
         document.getElementById('inputDeskripsiKategori').value = '';
-        document.getElementById('formKategori').action = '{{ route("kategori-barang.store") }}';
+        document.getElementById('formKategori').action = '{{ route("admin.kategori-barang.store") }}';
         document.getElementById('methodKategori').value = 'POST';
     });
 </script>

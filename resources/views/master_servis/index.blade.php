@@ -161,7 +161,7 @@
     document.getElementById('formPaket').addEventListener('submit', function(e) {
         e.preventDefault();
         const id = document.getElementById('paketId').value;
-        const url = id ? '{{ url("master-servis") }}/' + id : '{{ route("master-servis.store") }}';
+        const url = id ? '{{ url("admin/master-servis") }}/' + id : '{{ route("admin.master-servis.store") }}';
         const method = id ? 'PUT' : 'POST';
         const btn = this.querySelector('button[type="submit"]');
         btn.disabled = true;
@@ -189,7 +189,7 @@
         const btn = this;
         btn.disabled = true;
 
-        fetch('{{ url("master-servis") }}/' + hapusId, {
+        fetch('{{ url("admin/master-servis") }}/' + hapusId, {
             method: 'DELETE',
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
         })
