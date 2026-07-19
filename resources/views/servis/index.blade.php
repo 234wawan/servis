@@ -119,13 +119,13 @@
                                     </a></li>
 
                                     @if (!$item->is_void)
-                                        @if (auth()->user()->role !== 'kasir')
+                                        @if (auth()->user()->role === 'admin')
                                             <li><a class="dropdown-item" href="{{ route('admin.servis.edit', $item) }}">
                                                 <i class="bi bi-pencil"></i> Edit
                                             </a></li>
                                         @endif
 
-                                        @if ($item->status === 'pending' && auth()->user()->role !== 'kasir')
+                                        @if ($item->status === 'pending')
                                             <li>
                                                 <form action="{{ route('admin.servis.update-status', $item) }}" method="POST" class="d-inline update-status-form">
                                                     @csrf
@@ -137,7 +137,7 @@
                                             </li>
                                         @endif
 
-                                        @if ($item->status === 'proses' && auth()->user()->role !== 'kasir')
+                                        @if ($item->status === 'proses')
                                             <li>
                                                 <form action="{{ route('admin.servis.update-status', $item) }}" method="POST" class="d-inline update-status-form">
                                                     @csrf
@@ -251,7 +251,7 @@ $(function() {
     document.querySelectorAll('.btn-void').forEach(function(btn) {
         btn.addEventListener('click', function() {
             document.getElementById('voidKendaraan').textContent = this.dataset.kendaraan;
-            document.getElementById('formVoid').action = '{{ url("servis") }}/' + this.dataset.id + '/void';
+            document.getElementById('formVoid').action = '{{ url("admin/servis") }}/' + this.dataset.id + '/void';
             bootstrap.Modal.getOrCreateInstance(document.getElementById('modalVoid')).show();
         });
     });

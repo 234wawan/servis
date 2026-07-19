@@ -54,54 +54,68 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('pelanggan', PelangganController::class);
         Route::resource('kendaraan', KendaraanController::class);
 
-        Route::resource('servis', ServisController::class)->parameters(['servis' => 'servis']);
-        Route::post('/servis/{servis}/void', [ServisController::class, 'void'])->name('servis.void');
+        // ─── Servis: Kasir & Admin ───
+        Route::get('/servis', [ServisController::class, 'index'])->name('servis.index');
+        Route::get('/servis/create', [ServisController::class, 'create'])->name('servis.create');
+        Route::post('/servis', [ServisController::class, 'store'])->name('servis.store');
+        Route::get('/servis/{servis}', [ServisController::class, 'show'])->name('servis.show');
         Route::get('/servis/{servis}/checkout', [ServisController::class, 'checkout'])->name('servis.checkout');
         Route::post('/servis/{servis}/bayar', [ServisController::class, 'bayar'])->name('servis.bayar');
         Route::get('/servis/{servis}/struk', [ServisController::class, 'struk'])->name('servis.struk');
         Route::get('/servis/{servis}/nota', [ServisController::class, 'nota'])->name('servis.nota');
         Route::post('/servis/{servis}/update-status', [ServisController::class, 'updateStatus'])->name('servis.update-status');
 
-        Route::post('/master-servis/quick', [ServisController::class, 'storeMasterServis'])->name('master-servis.quick');
-        Route::resource('master-servis', MasterServisController::class)->except(['show']);
-
-        Route::resource('kategori-barang', KategoriBarangController::class)->except(['create', 'show', 'edit']);
-        Route::resource('sparepart', SparepartController::class);
-
         Route::prefix('laporan')->name('laporan.')->group(function () {
             Route::get('/keuangan', [LaporanController::class, 'keuangan'])->name('keuangan');
             Route::get('/keuangan/export', [LaporanController::class, 'exportKeuangan'])->name('keuangan.export');
             Route::get('/keuangan/pdf', [LaporanController::class, 'exportPdfKeuangan'])->name('keuangan.pdf');
-            Route::get('/performa', [LaporanController::class, 'performa'])->name('performa');
-            Route::get('/performa/export', [LaporanController::class, 'exportPerforma'])->name('performa.export');
-            Route::get('/performa/pdf', [LaporanController::class, 'exportPdfPerforma'])->name('performa.pdf');
-            Route::get('/stok', [LaporanController::class, 'stok'])->name('stok');
-            Route::get('/stok/export', [LaporanController::class, 'exportStok'])->name('stok.export');
         });
 
-        Route::resource('users', UserController::class)->middleware('admin');
-        Route::post('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active')->middleware('admin');
+        // ─── Admin Only ───
+        Route::middleware('role:admin')->group(function () {
+            Route::get('/servis/{servis}/edit', [ServisController::class, 'edit'])->name('servis.edit');
+            Route::put('/servis/{servis}', [ServisController::class, 'update'])->name('servis.update');
+            Route::delete('/servis/{servis}', [ServisController::class, 'destroy'])->name('servis.destroy');
+            Route::post('/servis/{servis}/void', [ServisController::class, 'void'])->name('servis.void');
 
-        // ─── Kelola Konten Website ───
-        Route::prefix('konten')->name('konten.')->group(function () {
-            Route::get('/fitur-layanan', [KontenController::class, 'fiturIndex'])->name('fitur.index');
-            Route::post('/fitur-layanan', [KontenController::class, 'fiturStore'])->name('fitur.store');
-            Route::put('/fitur-layanan/{fiturLayanan}', [KontenController::class, 'fiturUpdate'])->name('fitur.update');
-            Route::delete('/fitur-layanan/{fiturLayanan}', [KontenController::class, 'fiturDestroy'])->name('fitur.destroy');
-            Route::post('/fitur-layanan/{fiturLayanan}/toggle', [KontenController::class, 'fiturToggle'])->name('fitur.toggle');
+            Route::post('/master-servis/quick', [ServisController::class, 'storeMasterServis'])->name('master-servis.quick');
+            Route::resource('master-servis', MasterServisController::class)->except(['show']);
 
-            Route::get('/about', [KontenController::class, 'aboutIndex'])->name('about.index');
-            Route::post('/about', [KontenController::class, 'aboutUpdate'])->name('about.update');
+            Route::resource('kategori-barang', KategoriBarangController::class)->except(['create', 'show', 'edit']);
+            Route::resource('sparepart', SparepartController::class);
 
-            Route::get('/gallery', [KontenController::class, 'galleryIndex'])->name('gallery.index');
-            Route::post('/gallery', [KontenController::class, 'galleryStore'])->name('gallery.store');
-            Route::post('/gallery/{gallery}', [KontenController::class, 'galleryUpdate'])->name('gallery.update');
-            Route::delete('/gallery/{gallery}', [KontenController::class, 'galleryDestroy'])->name('gallery.destroy');
-            Route::post('/gallery/{gallery}/toggle', [KontenController::class, 'galleryToggle'])->name('gallery.toggle');
+            Route::prefix('laporan')->name('laporan.')->group(function () {
+                Route::get('/performa', [LaporanController::class, 'performa'])->name('performa');
+                Route::get('/performa/export', [LaporanController::class, 'exportPerforma'])->name('performa.export');
+                Route::get('/performa/pdf', [LaporanController::class, 'exportPdfPerforma'])->name('performa.pdf');
+                Route::get('/stok', [LaporanController::class, 'stok'])->name('stok');
+                Route::get('/stok/export', [LaporanController::class, 'exportStok'])->name('stok.export');
+            });
 
-            Route::get('/kontak', [KontenController::class, 'kontakIndex'])->name('kontak.index');
-            Route::post('/kontak', [KontenController::class, 'kontakUpdate'])->name('kontak.update');
-            Route::post('/kontak/seed', [KontenController::class, 'kontakSeed'])->name('kontak.seed');
+            Route::resource('users', UserController::class);
+            Route::post('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
+
+            // ─── Kelola Konten Website ───
+            Route::prefix('konten')->name('konten.')->group(function () {
+                Route::get('/fitur-layanan', [KontenController::class, 'fiturIndex'])->name('fitur.index');
+                Route::post('/fitur-layanan', [KontenController::class, 'fiturStore'])->name('fitur.store');
+                Route::put('/fitur-layanan/{fiturLayanan}', [KontenController::class, 'fiturUpdate'])->name('fitur.update');
+                Route::delete('/fitur-layanan/{fiturLayanan}', [KontenController::class, 'fiturDestroy'])->name('fitur.destroy');
+                Route::post('/fitur-layanan/{fiturLayanan}/toggle', [KontenController::class, 'fiturToggle'])->name('fitur.toggle');
+
+                Route::get('/about', [KontenController::class, 'aboutIndex'])->name('about.index');
+                Route::post('/about', [KontenController::class, 'aboutUpdate'])->name('about.update');
+
+                Route::get('/gallery', [KontenController::class, 'galleryIndex'])->name('gallery.index');
+                Route::post('/gallery', [KontenController::class, 'galleryStore'])->name('gallery.store');
+                Route::post('/gallery/{gallery}', [KontenController::class, 'galleryUpdate'])->name('gallery.update');
+                Route::delete('/gallery/{gallery}', [KontenController::class, 'galleryDestroy'])->name('gallery.destroy');
+                Route::post('/gallery/{gallery}/toggle', [KontenController::class, 'galleryToggle'])->name('gallery.toggle');
+
+                Route::get('/kontak', [KontenController::class, 'kontakIndex'])->name('kontak.index');
+                Route::post('/kontak', [KontenController::class, 'kontakUpdate'])->name('kontak.update');
+                Route::post('/kontak/seed', [KontenController::class, 'kontakSeed'])->name('kontak.seed');
+            });
         });
     });
 });

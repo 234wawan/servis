@@ -228,6 +228,7 @@
                             <i class="bi bi-tools"></i> Servis
                         </a>
                     </li>
+                    @if (Auth::user()->role === 'admin')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.master-servis.*') ? 'active' : '' }}" href="{{ route('admin.master-servis.index') }}">
                             <i class="bi bi-box-seam-fill"></i> Paket Servis
@@ -242,16 +243,20 @@
                             <li><a class="dropdown-item" href="{{ route('admin.sparepart.index') }}"><i class="bi bi-box-seam-fill"></i> Sparepart</a></li>
                         </ul>
                     </li>
+                    @endif
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}" href="#" data-bs-toggle="dropdown">
                             <i class="bi bi-file-earmark-bar-graph-fill"></i> Laporan
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('admin.laporan.keuangan') }}"><i class="bi bi-currency-dollar"></i> Keuangan</a></li>
+                            @if (Auth::user()->role === 'admin')
                             <li><a class="dropdown-item" href="{{ route('admin.laporan.performa') }}"><i class="bi bi-speedometer2"></i> Performa Servis</a></li>
                             <li><a class="dropdown-item" href="{{ route('admin.laporan.stok') }}"><i class="bi bi-exclamation-triangle"></i> Stok Menipis</a></li>
+                            @endif
                         </ul>
                     </li>
+                    @if (Auth::user()->role === 'admin')
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.konten.*') ? 'active' : '' }}" href="#" data-bs-toggle="dropdown">
                             <i class="bi bi-layout-text-window"></i> Konten Website
@@ -263,6 +268,7 @@
                             <li><a class="dropdown-item" href="{{ route('admin.konten.kontak.index') }}"><i class="bi bi-envelope"></i> Kontak</a></li>
                         </ul>
                     </li>
+                    @endif
                     @if (Auth::user()->role === 'admin')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">

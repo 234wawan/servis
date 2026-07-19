@@ -14,7 +14,7 @@
             <dd class="col-sm-9">{{ $user->email }}</dd>
             <dt class="col-sm-3">Role</dt>
             <dd class="col-sm-9">
-                <span class="role-badge {{ $user->role === 'admin' ? 'role-admin' : ($user->role === 'teknisi' ? 'bg-success' : 'role-kasir') }} text-white">
+                <span class="role-badge {{ $user->role === 'admin' ? 'role-admin' : 'role-kasir' }} text-white">
                     {{ ucfirst($user->role) }}
                 </span>
             </dd>

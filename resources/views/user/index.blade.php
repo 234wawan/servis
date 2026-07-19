@@ -28,7 +28,7 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            <span class="role-badge {{ $user->role === 'admin' ? 'role-admin' : ($user->role === 'teknisi' ? 'bg-success' : 'role-kasir') }} text-white">
+                            <span class="role-badge {{ $user->role === 'admin' ? 'role-admin' : 'role-kasir' }} text-white">
                                 {{ ucfirst($user->role) }}
                             </span>
                         </td>

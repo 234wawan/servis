@@ -2,7 +2,7 @@
     <button id="btn-reset-chat" wire:click="resetChat" class="d-none"></button>
 
     {{-- Chat Area --}}
-    <div class="flex-grow-1 p-3 bg-light chat-scroll d-flex flex-column gap-3 overflow-y-auto" x-ref="chatbox" x-init="$nextTick(() => $el.scrollTop = $el.scrollHeight)" wire:poll.200ms>
+    <div class="flex-grow-1 p-3 bg-light chat-scroll d-flex flex-column gap-3 overflow-y-auto" x-ref="chatbox" x-init="$nextTick(() => $el.scrollTop = $el.scrollHeight)">
         @foreach ($messages as $msg)
             <div class="d-flex {{ $msg['from'] === 'user' ? 'justify-content-end' : 'justify-content-start' }} align-items-end gap-2 bounce-in" style="max-width: 90%; {{ $msg['from'] === 'user' ? 'align-self: flex-end;' : 'align-self: flex-start;' }}">
                 @if ($msg['from'] === 'bot')

@@ -303,10 +303,6 @@ class ChatbotServis extends Component
 
         $pakets = MasterServis::orderBy('nama_paket')->get();
 
-        $msg = 'Terima kasih! Berikut <b>paket servis</b> yang tersedia:';
-
-        $this->addMessage('bot', $msg);
-
         if ($pakets->isEmpty()) {
             $this->addMessage('bot', '(Belum ada paket servis tersedia. Servis akan dicatat tanpa paket.)');
             $this->selectedPaket = null;

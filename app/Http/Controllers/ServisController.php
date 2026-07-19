@@ -96,9 +96,6 @@ class ServisController extends Controller
         if ($servis->is_void) {
             return redirect()->route('admin.servis.index')->with('error', 'Servis yang sudah di-void tidak dapat diedit.');
         }
-        if (auth()->user()->role === 'kasir') {
-            return redirect()->route('admin.servis.index')->with('error', 'Kasir tidak diizinkan mengedit servis.');
-        }
 
         $servis->load('spareparts');
         $kendaraans = Kendaraan::with('pelanggan')->orderBy('no_polisi')->get();
@@ -111,9 +108,6 @@ class ServisController extends Controller
     {
         if ($servis->is_void) {
             return redirect()->route('admin.servis.index')->with('error', 'Servis yang sudah di-void tidak dapat diedit.');
-        }
-        if (auth()->user()->role === 'kasir') {
-            return redirect()->route('admin.servis.index')->with('error', 'Kasir tidak diizinkan mengedit servis.');
         }
 
         $request->merge(['biaya' => str_replace('.', '', $request->biaya)]);
@@ -149,10 +143,6 @@ class ServisController extends Controller
 
     public function destroy(Servis $servis)
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('admin.servis.index')->with('error', 'Hanya admin yang dapat menghapus servis.');
-        }
-
         if ($servis->status !== 'pending') {
             return redirect()->route('admin.servis.index')->with('error', 'Hanya servis dengan status pending yang dapat dihapus.');
         }
@@ -171,10 +161,6 @@ class ServisController extends Controller
 
     public function void(Request $request, Servis $servis)
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('admin.servis.index')->with('error', 'Hanya admin yang dapat melakukan void.');
-        }
-
         if ($servis->is_void) {
             return redirect()->route('admin.servis.index')->with('error', 'Servis ini sudah di-void sebelumnya.');
         }
